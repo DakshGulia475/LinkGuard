@@ -143,4 +143,31 @@ const loginUser =async (req,res)=>{
     });
    }
 };
-export {registerUser,loginUser};
+const getMe= async(req,res)=>{
+    try{
+      const id=req.user.id;
+      const user= await User.findById(id);
+      if(!user){
+        return res.status(404).json(
+            {
+                message:"user not found"
+            }
+        )
+      }
+      return res.status(200).json(
+        {
+            user:{
+                id:user._id,
+                email:user.email
+            }
+        }
+      )
+    }
+    catch(error){
+    console.error("Login error:", error);
+    return res.status(500).json({
+        message: "Internal server error"
+    });
+    }
+};
+export {registerUser,loginUser,getMe};
